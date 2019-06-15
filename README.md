@@ -8,6 +8,8 @@ kube-dns혹은 coredns와 연동하여 사용할 수 있습니다.
 
 hbase의 경우 hostname으로 ip를 찾는데 kubernetes상에서 hbase를 운용할 때 유용하게 사용하실 수 있습니다.
 
+*pod_name*.*namespace*.podname.cluster.local 형식의 DNS Query으로 IP를 얻어올 수 있습니다.
+
 ```yaml
 apiVersion: v1
 kind: ServiceAccount
@@ -16,7 +18,7 @@ metadata:
   namespace: kube-system
 ---
 apiVersion: rbac.authorization.k8s.io/v1
-kind: Role
+kind: ClusterRole
 metadata:
   name: kube-podname-dns-role
   namespace: kube-system
@@ -27,16 +29,16 @@ rules:
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 # This role binding allows "jane" to read pods in the "default" namespace.
-kind: RoleBinding
+kind: ClusterRoleBinding
 metadata:
-  name: kube-podname-dns-role
+  name: kube-podname-dns-rolebinding
   namespace: kube-system
 subjects:
 - kind: ServiceAccount
   name: kube-podname-dns
   namespace: zeron-master
 roleRef:
-  kind: Role
+  kind: ClusterRole
   name: kube-podname-dns-role
   apiGroup: rbac.authorization.k8s.io
 ---
@@ -79,6 +81,7 @@ spec:
           mountPath: "/secret"
         ports:
         - containerPort: 53
+          protocol: UDP
 ---
 kind: Service
 apiVersion: v1
