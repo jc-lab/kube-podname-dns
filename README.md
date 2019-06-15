@@ -104,7 +104,7 @@ spec:
 
 kube-dns 사용하는 경우 (이미 kube-dns ConfigMap가 존재하기 때문에 stubDomains에 아래 내용 추가)
 ```yaml
-stubDomains: {"podname.cluster.local" : ["kube-podname-dns"]}
+stubDomains: {"podname.cluster.local" : ["10.244.0.110"]}
 ```
 
 core-dns 사용하는 경우
