@@ -115,3 +115,22 @@ podname.cluster.local:53 {
     proxy . 10.244.0.110
 }
 ```
+
+
+pod에서 *Pod Name*으로 DNS쿼리하려면
+```yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  namespace: default
+  name: dns-example
+spec:
+  containers:
+    - name: test
+      image: nginx
+  dnsConfig:
+    searches:
+      - podname.cluster.local
+      - default.podname.cluster.local
+```
+위와같이 dnsConfig->searches을 추가하면 됩니다.
